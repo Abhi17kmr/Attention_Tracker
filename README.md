@@ -1,7 +1,3 @@
-Here’s a fully aligned and professional **README.md** for your GitHub repo, following the structured style you liked — clean sections, icons, and a modern open-source project feel:
-
----
-
 # 🧠 Attention AI — Real-Time Attention Monitoring System
 
 A **production-ready, real-time attention analysis system** built using **Computer Vision + Machine Learning**, designed to evaluate user focus through behavioral signals such as eye movement, blink patterns, and head orientation.
