@@ -6,11 +6,20 @@ from scipy.spatial import distance as dist
 mp_mesh = mp.solutions.face_mesh
 mesh = mp_mesh.FaceMesh(refine_landmarks=True)
 
-mp_draw = mp.solutions.drawing_utils
-mp_style = mp.solutions.drawing_styles
-
 LEFT = [33,160,158,133,153,144]
 RIGHT = [362,385,387,263,373,380]
+
+# 3D model points for head pose estimation
+MODEL_POINTS = np.array([
+    (0.0, 0.0, 0.0),         # Nose tip
+    (0.0, -330.0, -65.0),    # Chin
+    (-225.0, 170.0, -135.0), # Left eye corner
+    (225.0, 170.0, -135.0),  # Right eye corner
+    (-150.0, -150.0, -125.0),# Left mouth corner
+    (150.0, -150.0, -125.0)  # Right mouth corner
+], dtype=np.float64)
+
+LANDMARK_IDS = [1, 152, 33, 263, 61, 291]
 
 def ear(eye):
     A = dist.euclidean(eye[1], eye[5])
@@ -18,7 +27,32 @@ def ear(eye):
     C = dist.euclidean(eye[0], eye[3])
     return (A+B)/(2*C)
 
-def extract_features(frame):
+def get_head_pose(face, h, w):
+    image_points = np.array([
+        (face.landmark[i].x * w, face.landmark[i].y * h) for i in LANDMARK_IDS
+    ], dtype=np.float64)
+
+    focal_length = w
+    center = (w/2, h/2)
+    camera_matrix = np.array([
+        [focal_length, 0, center[0]],
+        [0, focal_length, center[1]],
+        [0, 0, 1]
+    ], dtype=np.float64)
+
+    dist_coeffs = np.zeros((4,1))
+    success, rotation_vector, translation_vector = cv2.solvePnP(
+        MODEL_POINTS, image_points, camera_matrix, dist_coeffs, flags=cv2.SOLVEPNP_ITERATIVE
+    )
+
+    rmat, _ = cv2.Rodrigues(rotation_vector)
+    pose_mat = cv2.hconcat((rmat, translation_vector))
+    _, _, _, _, _, _, euler_angles = cv2.decomposeProjectionMatrix(pose_mat)
+
+    pitch, yaw, roll = [float(angle) for angle in euler_angles]
+    return pitch, yaw, roll
+
+def extract_features(frame, baseline_ear=None):
     rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
     res = mesh.process(rgb)
 
@@ -28,29 +62,26 @@ def extract_features(frame):
     face = res.multi_face_landmarks[0]
     h, w, _ = frame.shape
 
-    # -------- Landmarks for drawing --------
     landmarks = [(int(lm.x*w), int(lm.y*h)) for lm in face.landmark]
 
-    # -------- Eyes --------
-    left_eye = [(int(face.landmark[i].x*w),
-                 int(face.landmark[i].y*h)) for i in LEFT]
-
-    right_eye = [(int(face.landmark[i].x*w),
-                  int(face.landmark[i].y*h)) for i in RIGHT]
+    left_eye = [(int(face.landmark[i].x*w), int(face.landmark[i].y*h)) for i in LEFT]
+    right_eye = [(int(face.landmark[i].x*w), int(face.landmark[i].y*h)) for i in RIGHT]
 
     ear_val = (ear(left_eye)+ear(right_eye))/2
 
-    # Head pose proxy
-    nose = face.landmark[1]
-    yaw = (nose.x - 0.5) * 100
+    if baseline_ear:
+        eye_closure = 1 if ear_val < baseline_ear * 0.75 else 0
+    else:
+        eye_closure = 1 if ear_val < 0.2 else 0
 
-    blink_rate = max(0, (0.3 - ear_val) * 100)
+    pitch, yaw, roll = get_head_pose(face, h, w)
 
     features = {
-        "blink_rate": blink_rate,
         "ear": ear_val,
+        "eye_closure": eye_closure,
+        "pitch": pitch,
         "yaw": yaw,
-        "eye_closure": 1 if ear_val < 0.2 else 0
+        "roll": roll
     }
 
     return features, landmarks
