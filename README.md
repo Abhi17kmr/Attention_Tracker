@@ -1,53 +1,51 @@
+Here’s a fully aligned and professional **README.md** for your GitHub repo, following the structured style you liked — clean sections, icons, and a modern open-source project feel:
+
+---
+
 # 🧠 Attention AI — Real-Time Attention Monitoring System
 
 A **production-ready, real-time attention analysis system** built using **Computer Vision + Machine Learning**, designed to evaluate user focus through behavioral signals such as eye movement, blink patterns, and head orientation.
 
 ---
 
-# 🚀 Overview
+## 🚀 Overview
 
-**Attention AI** analyzes live webcam input or recorded video to generate a unified **Attention Score (0–100)**.
+**Attention AI** analyzes live webcam input or recorded video to generate a unified **Attention Score (0–100)**.  
 It combines multiple human behavioral cues into a single interpretable metric, making it suitable for:
 
-* 🎓 Online learning analytics
-* 💼 Workplace productivity monitoring
-* 🧪 Behavioral research
-* 🤖 Human-computer interaction systems
+* 🎓 Online learning analytics  
+* 💼 Workplace productivity monitoring  
+* 🧪 Behavioral research  
+* 🤖 Human-computer interaction systems  
 
 ---
 
-# 🎯 Core Features
+## 🎯 Core Features
 
 ### 👁️ Eye Tracking (EAR)
-
-* Detects eye openness using **Eye Aspect Ratio**
-* Helps identify drowsiness and fatigue
+- Detects eye openness using **Eye Aspect Ratio**  
+- Helps identify drowsiness and fatigue  
 
 ### 👀 Blink Rate Detection
-
-* Tracks blink frequency over time
-* High blink rate → fatigue or distraction indicator
+- Tracks blink frequency over time  
+- High blink rate → fatigue or distraction indicator  
 
 ### 🧭 Head Pose Estimation
-
-* Uses facial landmarks to estimate **yaw (left/right movement)**
-* Detects off-screen attention
+- Uses facial landmarks to estimate **yaw, pitch, roll**  
+- Detects off-screen attention  
 
 ### 😴 Eye Closure Detection
-
-* Identifies prolonged eye closure (fatigue signal)
+- Identifies prolonged eye closure (fatigue signal)  
 
 ### 🧠 ML-Based Attention Score
-
-* Combines all features into a **single score (0–100)**
-* Uses:
-
-  * Trained model (if available)
-  * Intelligent fallback scoring (if model not present)
+- Combines all features into a **single score (0–100)**  
+- Uses:
+  - Trained model (`attention.pkl`) if available  
+  - Intelligent fallback scoring if model not present  
 
 ---
 
-# 🧩 System Architecture
+## 🧩 System Architecture
 
 ```bash
 attention-ai/
@@ -64,8 +62,8 @@ attention-ai/
 ├── models/               # Trained ML models
 │   └── attention.pkl
 │
-├── demo/                 # Sample inputs
-│   └── sample.mp4
+├── logs/                 # Runtime logs
+│   └── attention_log.csv
 │
 ├── requirements.txt
 ├── README.md
@@ -73,154 +71,124 @@ attention-ai/
 
 ---
 
-# ⚙️ Installation
+## ⚙️ Installation
 
 ### 1. Clone the repository
-
 ```bash
 git clone https://github.com/your-username/attention-ai.git
 cd attention-ai
 ```
 
 ### 2. Install dependencies
-
 ```bash
 pip install -r requirements.txt
 ```
 
 ---
 
-# ▶️ Usage
+## ▶️ Usage
 
-## 🎥 Real-Time Webcam Mode
-
+### 🎥 Real-Time Webcam Mode
 ```bash
-python app/webcam_app.py
+python -m attention.webcam_app
 ```
-
-### Output:
-
-* Live facial landmarks
-* Attention Score (0–100)
-* Status: Focused / Moderate / Distracted
+**Output:**
+- Live facial landmarks  
+- Attention Score (0–100)  
+- Status: Focused / Moderate / Distracted  
 
 ---
 
-## 📂 Video File Analysis
-
+### 📂 Video File Analysis
 ```bash
-python app/video_app.py
+python -m attention.video_app
 ```
-
 Then enter:
-
 ```bash
 path/to/video.mp4
 ```
 
 ---
 
-# 🧠 Attention Score Logic
+## 🧠 Attention Score Logic
 
 The system computes attention using:
+- Blink Rate  
+- Eye Aspect Ratio (EAR)  
+- Head Pose (Yaw, Pitch, Roll)  
+- Eye Closure Duration  
 
-* Blink Rate
-* Eye Aspect Ratio (EAR)
-* Head Pose (Yaw)
-* Eye Closure Duration
-
-### ML Mode:
-
+### ML Mode
 If `models/attention.pkl` exists:
+- Uses trained classifier  
+- Outputs probability-based score  
 
-* Uses trained classifier
-* Outputs probability-based score
-
-### Fallback Mode:
-
+### Fallback Mode
 If no model is present:
-
-* Uses weighted heuristic scoring
-* Ensures system always runs
-
----
-
-# 🎨 Visual Output
-
-* 🟢 Facial landmark overlay (468 points)
-* 📊 Attention score bar
-* 📍 Real-time tracking feedback
+- Uses weighted heuristic scoring  
+- Ensures system always runs  
 
 ---
 
-# 🔬 Tech Stack
-
-* **OpenCV** — video processing
-* **MediaPipe** — facial landmark detection
-* **NumPy / SciPy** — numerical computation
-* **Scikit-learn** — machine learning
-* **Joblib** — model loading
+## 🎨 Visual Output
+- 🟢 Facial landmark overlay (468 points)  
+- 📊 Attention score panel  
+- 📍 Real-time tracking feedback  
 
 ---
 
-# ⚡ Performance
-
-* Real-time processing (~20–30 FPS)
-* Lightweight and CPU-friendly
-* No GPU required
-
----
-
-# 🧪 Future Improvements
-
-* 📈 Temporal models (LSTM / Transformers)
-* 🖥️ Advanced GUI (PyQt Dashboard)
-* 👥 Multi-face tracking
-* ☁️ Cloud-based API deployment
-* 📊 Attention analytics dashboard
+## 🔬 Tech Stack
+- **OpenCV** — video processing  
+- **MediaPipe** — facial landmark detection  
+- **NumPy / SciPy** — numerical computation  
+- **Scikit-learn** — machine learning  
+- **Joblib** — model persistence  
 
 ---
 
-# 🤝 Contribution
+## ⚡ Performance
+- Real-time processing (~20–30 FPS)  
+- Lightweight and CPU-friendly  
+- No GPU required  
 
-Contributions are welcome!
+---
+
+## 🧪 Future Improvements
+- 📈 Temporal models (LSTM / Transformers)  
+- 🖥️ Advanced GUI (PyQt Dashboard)  
+- 👥 Multi-face tracking  
+- ☁️ Cloud-based API deployment  
+- 📊 Attention analytics dashboard  
+
+---
+
+## 🤝 Contribution
+Contributions are welcome!  
 
 Steps:
-
-1. Fork the repo
-2. Create a new branch
-3. Make changes
-4. Submit a pull request
-
----
-
-# 📜 License
-
-This project is open-source and available under the MIT License.
+1. Fork the repo  
+2. Create a new branch  
+3. Make changes  
+4. Submit a pull request  
 
 ---
 
-# 🙌 Acknowledgements
-
-* MediaPipe by Google
-* OpenCV Community
-* Scikit-learn
+## 📜 License
+This project is open-source and available under the **MIT License**.
 
 ---
 
-# 💡 Final Note
-
-This project demonstrates how **simple behavioral signals + ML** can create powerful, real-time attention systems without heavy deep learning models.
-
----
-
-# 🔥 Demo Ready
-
-✔ Clean architecture
-✔ Real-time + video support
-✔ ML-integrated pipeline
-✔ Visual feedback
+## 🙌 Acknowledgements
+- MediaPipe by Google  
+- OpenCV Community  
+- Scikit-learn  
 
 ---
 
-👉 Built for performance, clarity, and rapid deployment.
+## 🔥 Demo Ready
+✔ Clean architecture  
+✔ Real-time + video support  
+✔ ML-integrated pipeline  
+✔ Visual feedback  
+
+👉 Built for performance, clarity, and rapid deployment.  
