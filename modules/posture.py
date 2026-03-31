@@ -1,25 +1,27 @@
 import cv2
+import mediapipe as mp
 
 class PostureTracker:
     def __init__(self):
         """
-        Initialize posture tracker.
-        If Advisor-ai provides a skeleton tracking model (MediaPipe/OpenPose),
-        set it up here.
+        Initialize posture tracker using MediaPipe Pose (Advisor-ai style).
         """
-        # Example: self.pose = mp.solutions.pose.Pose()
-        pass
+        self.pose = mp.solutions.pose.Pose()
 
     def track(self, frame):
         """
-        Track posture from the given frame.
-        Currently returns a placeholder label.
-        Replace with actual skeleton landmark analysis.
+        Track posture from the given frame using skeleton landmarks.
         """
-        # Example placeholder logic:
-        # results = self.pose.process(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
-        # if results.pose_landmarks:
-        #     analyze landmarks for slouch/lean/upright
-        #     return "Slouch" or "Lean" or "Upright"
+        results = self.pose.process(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
+        if not results.pose_landmarks:
+            return "Unknown"
 
-        return "Upright"  # Default placeholder
+        landmarks = results.pose_landmarks.landmark
+        left_shoulder = landmarks[11]
+        left_hip = landmarks[23]
+
+        # Simple heuristic: shoulder vs hip vertical distance
+        if (left_shoulder.y - left_hip.y) < 0.1:
+            return "Slouch"
+        else:
+            return "Upright"
