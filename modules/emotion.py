@@ -1,31 +1,32 @@
 import cv2
 import numpy as np
+from tensorflow.keras.models import load_model
 
 class EmotionDetector:
-    def __init__(self, model_path=None):
+    def __init__(self, model_path="models/emotion_model.h5"):
         """
-        Initialize emotion detector.
-        If Advisor-ai provides a trained model, load it here.
+        Initialize emotion detector by loading Advisor-ai's CNN model.
         """
-        self.model = None
-        if model_path:
-            try:
-                # Example: load a CNN model (Keras, PyTorch, etc.)
-                # self.model = load_model(model_path)
-                pass
-            except Exception as e:
-                print(f"Could not load emotion model: {e}")
+        try:
+            self.model = load_model(model_path)
+        except Exception as e:
+            print(f"Could not load emotion model: {e}")
+            self.model = None
+
+        # Standard FER2013 emotion labels
+        self.labels = ["Angry", "Disgust", "Fear", "Happy", "Sad", "Surprise", "Neutral"]
 
     def detect(self, frame):
         """
-        Detect emotion from the given frame.
-        Currently returns a placeholder label.
-        Replace with actual inference using Advisor-ai's model.
+        Detect emotion from the given frame using Advisor-ai's model.
         """
-        # Example placeholder logic:
-        # gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-        # face_roi = preprocess(gray)
-        # pred = self.model.predict(face_roi)
-        # return decode_prediction(pred)
+        if not self.model:
+            return "Neutral"
 
-        return "Neutral"  # Default placeholder
+        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        face_roi = cv2.resize(gray, (48, 48)) / 255.0
+        face_roi = np.expand_dims(face_roi, axis=(0, -1))  # shape (1,48,48,1)
+
+        pred = self.model.predict(face_roi)
+        emotion_label = np.argmax(pred)
+        return self.labels[emotion_label]
