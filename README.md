@@ -1,190 +1,167 @@
-# 🧠 Attention AI — Real-Time Attention Monitoring System
+🧠 Attention AI-Real-Time Behavioral Intelligence System
+📌 Overview
 
-A **production-ready, real-time attention analysis system** built using **Computer Vision + Machine Learning**, designed to evaluate user focus through behavioral signals such as eye movement, blink patterns, and head orientation.
+Attention AI is a production-ready, real-time attention analysis system built using Computer Vision and Machine Learning.
 
----
+It evaluates user focus using multiple behavioral signals:
 
-## 🚀 Overview
+Eye movement
+Blink patterns
+Head pose
+Facial landmarks
 
-**Attention AI** analyzes live webcam input or recorded video to generate a unified **Attention Score (0–100)**.  
-It combines multiple human behavioral cues into a single interpretable metric, making it suitable for:
+and generates a unified Attention Score (0–100).
 
-* 🎓 Online learning analytics  
-* 💼 Workplace productivity monitoring  
-* 🧪 Behavioral research  
-* 🤖 Human-computer interaction systems  
+Designed as a scalable AI system, not just a demo.
 
----
+🎥 Live Demo
 
-## 🎯 Core Features
+🏗️ Architecture
 
-### 👁️ Eye Tracking (EAR)
-- Detects eye openness using **Eye Aspect Ratio**  
-- Helps identify drowsiness and fatigue  
-
-### 👀 Blink Rate Detection
-- Tracks blink frequency over time  
-- High blink rate → fatigue or distraction indicator  
-
-### 🧭 Head Pose Estimation
-- Uses facial landmarks to estimate **yaw, pitch, roll**  
-- Detects off-screen attention  
-
-### 😴 Eye Closure Detection
-- Identifies prolonged eye closure (fatigue signal)  
-
-### 🧠 ML-Based Attention Score
-- Combines all features into a **single score (0–100)**  
-- Uses:
-  - Trained model (`attention.pkl`) if available  
-  - Intelligent fallback scoring if model not present  
-
----
-
-## 🧩 System Architecture
-
-```bash
+🧠 System Pipeline
+Video Input (Webcam / Video)
+        ↓
+Face Detection (YOLOv8 / MediaPipe)
+        ↓
+Facial Landmark Extraction
+        ↓
+Feature Extraction
+ ├── Eye Aspect Ratio (EAR)
+ ├── Blink Rate
+ ├── Head Pose (Yaw/Pitch/Roll)
+ ├── Eye Closure Duration
+        ↓
+Attention Engine
+        ↓
+ML Model / Fallback Scoring
+        ↓
+Analytics & Logging
+        ↓
+Visualization Overlay
+        ↓
+Final Output (Score + UI)
+🏗️ Project Structure (UPDATED)
 attention-ai/
 │
-├── attention/            # Core AI Engine
-│   ├── engine.py         # Main processing pipeline
-│   ├── features.py       # Feature extraction (CV)
-│   ├── model.py          # ML + fallback scoring
+├── attention/                 # Core AI Engine
+│   ├── engine.py              # Main pipeline controller
+│   ├── features.py            # EAR, blink, pose extraction
+│   ├── model.py               # ML model + fallback scoring
+│   ├── detector.py            # (YOLOv8 / MediaPipe integration)
+│   ├── gaze.py                # Gaze tracking (optional extension)
+│   ├── fatigue.py             # Fatigue logic
+│   ├── headpose.py            # Head pose estimation
 │
-├── app/                  # Applications
-│   ├── webcam_app.py     # Real-time webcam analysis
-│   ├── video_app.py      # Video file processing
+├── app/                       # Application layer
+│   ├── webcam_app.py          # Real-time webcam app
+│   ├── video_app.py           # Video processing app
 │
-├── models/               # Trained ML models
-│   └── attention.pkl
+├── utils/
+│   ├── drawing.py             # UI overlays
+│   ├── io.py                  # Input/output handling
 │
-├── logs/                 # Runtime logs
-│   └── attention_log.csv
+├── models/
+│   └── attention.pkl          # Trained ML model
 │
+├── logs/
+│   └── attention_log.csv      # Session logs
+│
+├── assets/                    # README visuals
+│   ├── demo.gif
+│   ├── architecture.png
+│   ├── output_main.png
+│
+├── main.py                    # Optional unified runner
 ├── requirements.txt
 ├── README.md
-```
 
----
+🎯 Core Features
+👁️ Eye Tracking (EAR)
+Computes Eye Aspect Ratio
+Detects drowsiness and fatigue
+👀 Blink Rate Detection
+Tracks blink frequency over time
+Identifies fatigue & distraction
+🧭 Head Pose Estimation
+Calculates:
+Yaw
+Pitch
+Roll
+Detects off-screen attention
+😴 Eye Closure Detection
+Detects prolonged eye closure
+Strong fatigue signal
+🧠 ML-Based Attention Score
+🔹 ML Mode
+Uses trained model: models/attention.pkl
+Outputs probability-based attention score
+🔹 Fallback Mode
+Weighted heuristic scoring
+Ensures system always runs
+📊 Analytics System
+Logs session data (attention_log.csv)
+Enables:
+Dataset creation
+Model improvement
+Behavioral insights
+🎨 Visualization Layer
+Facial landmarks overlay
+Attention score display
+Real-time feedback (Focused / Distracted)
+▶️ Usage
+🎥 Webcam Mode
+python -m app.webcam_app
+📂 Video Mode
+python -m app.video_app
+🔁 Optional Unified Run
+python main.py
+⚙️ Installation
+git clone https://github.com/Abhi17kmr/Attention_Tracker.git
+cd Attention_Tracker
 
-## ⚙️ Installation
-
-### 1. Clone the repository
-```bash
-git clone https://github.com/your-username/attention-ai.git
-cd attention-ai
-```
-
-### 2. Install dependencies
-```bash
 pip install -r requirements.txt
-```
+🔬 Tech Stack
+YOLOv8 (Ultralytics) — Face detection
+MediaPipe — Facial landmarks
+OpenCV — Video processing
+NumPy / SciPy — Computation
+Scikit-learn — ML model
+Joblib — Model persistence
+⚡ Performance
+~20–30 FPS (CPU)
+Real-time processing
+Lightweight and efficient
+📸 Sample Outputs
+🎯 Real-Time Tracking
 
----
+🚀 Future Improvements
+🔬 AI Enhancements
+LSTM / Transformer-based temporal models
+Personalized attention scoring
+🖥️ Product Enhancements
+PyQt GUI dashboard
+Multi-face tracking
+Web-based deployment
+☁️ System Scaling
+REST API backend
+Cloud deployment
+Analytics dashboard
+📊 Use Cases
+Online learning platforms
+Workplace monitoring
+Driver attention systems
+Behavioral research
+🤝 Contribution
 
-## ▶️ Usage
+Pull requests are welcome.
 
-### 🎥 Real-Time Webcam Mode
-```bash
-python -m attention.webcam_app
-```
-**Output:**
-- Live facial landmarks  
-- Attention Score (0–100)  
-- Status: Focused / Moderate / Distracted  
+📜 License
 
----
+MIT License
 
-### 📂 Video File Analysis
-```bash
-python -m attention.video_app
-```
-Then enter:
-```bash
-path/to/video.mp4
-```
-
----
-
-## 🧠 Attention Score Logic
-
-The system computes attention using:
-- Blink Rate  
-- Eye Aspect Ratio (EAR)  
-- Head Pose (Yaw, Pitch, Roll)  
-- Eye Closure Duration  
-
-### ML Mode
-If `models/attention.pkl` exists:
-- Uses trained classifier  
-- Outputs probability-based score  
-
-### Fallback Mode
-If no model is present:
-- Uses weighted heuristic scoring  
-- Ensures system always runs  
-
----
-
-## 🎨 Visual Output
-- 🟢 Facial landmark overlay (468 points)  
-- 📊 Attention score panel  
-- 📍 Real-time tracking feedback  
-
----
-
-## 🔬 Tech Stack
-- **OpenCV** — video processing  
-- **MediaPipe** — facial landmark detection  
-- **NumPy / SciPy** — numerical computation  
-- **Scikit-learn** — machine learning  
-- **Joblib** — model persistence  
-
----
-
-## ⚡ Performance
-- Real-time processing (~20–30 FPS)  
-- Lightweight and CPU-friendly  
-- No GPU required  
-
----
-
-## 🧪 Future Improvements
-- 📈 Temporal models (LSTM / Transformers)  
-- 🖥️ Advanced GUI (PyQt Dashboard)  
-- 👥 Multi-face tracking  
-- ☁️ Cloud-based API deployment  
-- 📊 Attention analytics dashboard  
-
----
-
-## 🤝 Contribution
-Contributions are welcome!  
-
-Steps:
-1. Fork the repo  
-2. Create a new branch  
-3. Make changes  
-4. Submit a pull request  
-
----
-
-## 📜 License
-This project is open-source and available under the **MIT License**.
-
----
-
-## 🙌 Acknowledgements
-- MediaPipe by Google  
-- OpenCV Community  
-- Scikit-learn  
-
----
-
-## 🔥 Demo Ready
-✔ Clean architecture  
-✔ Real-time + video support  
-✔ ML-integrated pipeline  
-✔ Visual feedback  
-
-👉 Built for performance, clarity, and rapid deployment.  
+🔥 Why This Project Stands Out
+✅ Real-time AI system
+✅ ML + fallback hybrid design
+✅ Modular & scalable architecture
+✅ Production-ready structure
+✅ Strong portfolio + resume impact
