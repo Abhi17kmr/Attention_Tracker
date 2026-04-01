@@ -1,37 +1,30 @@
-import numpy as np
+import csv, json, datetime
 
-class SessionAnalytics:
-    def __init__(self):
-        self.attention_scores = []
-        self.fatigue_levels = []
-        self.blink_rates = []
-        self.yawn_counts = []
-        self.pupil_positions = []
-        self.emotions = []
-        self.postures = []
+class AnalyticsLogger:
+    def __init__(self, csv_path="session_log.csv", json_path="session_log.json"):
+        self.csv_path = csv_path
+        self.json_path = json_path
+        self.records = []
 
-    def update(self, attention, fatigue, blink_rate, yawn_count, pupil_coords, emotion, posture):
-        self.attention_scores.append(attention)
-        self.fatigue_levels.append(fatigue)
-        self.blink_rates.append(blink_rate)
-        self.yawn_counts.append(yawn_count)
-        self.pupil_positions.append(pupil_coords)
-        self.emotions.append(emotion)
-        self.postures.append(posture)
+    def log(self, attention_score, blink_rate, gaze, head_pose, posture):
+        record = {
+            "timestamp": datetime.datetime.now().isoformat(),
+            "attention_score": attention_score,
+            "blink_rate": blink_rate,
+            "gaze_direction": gaze,
+            "head_pose": head_pose,
+            "posture": posture
+        }
+        self.records.append(record)
 
-    def summary(self):
-        avg_attention = np.mean(self.attention_scores) if self.attention_scores else 0
-        avg_blink_rate = np.mean(self.blink_rates) if self.blink_rates else 0
-        total_yawns = sum(self.yawn_counts)
-        fatigue_distribution = {lvl: self.fatigue_levels.count(lvl) for lvl in set(self.fatigue_levels)}
-        emotion_distribution = {e: self.emotions.count(e) for e in set(self.emotions)}
-        posture_distribution = {p: self.postures.count(p) for p in set(self.postures)}
+    def export_csv(self):
+        if not self.records: return
+        keys = self.records[0].keys()
+        with open(self.csv_path, "w", newline="") as f:
+            writer = csv.DictWriter(f, fieldnames=keys)
+            writer.writeheader()
+            writer.writerows(self.records)
 
-        print("\n--- Session Summary ---")
-        print(f"Average Attention: {avg_attention:.2f}")
-        print(f"Average Blink Rate: {avg_blink_rate:.1f} per min")
-        print(f"Total Yawns: {total_yawns}")
-        print(f"Fatigue Distribution: {fatigue_distribution}")
-        print(f"Emotion Distribution: {emotion_distribution}")
-        print(f"Posture Distribution: {posture_distribution}")
-        print(f"Total Pupil Samples: {len(self.pupil_positions)}")
+    def export_json(self):
+        with open(self.json_path, "w") as f:
+            json.dump(self.records, f, indent=4)
