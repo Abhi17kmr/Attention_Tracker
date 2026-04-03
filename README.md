@@ -70,10 +70,6 @@ attention-ai/
 │   ├── fatigue.py             # Fatigue logic
 │   └── headpose.py            # Head pose estimation
 │
-├── app/                       # Application Layer
-│   ├── webcam_app.py          # Real-time webcam app
-│   └── video_app.py           # Video processing app
-│
 ├── utils/
 │   ├── drawing.py             # UI overlays
 │   └── io.py                  # Input/output handling
@@ -83,12 +79,6 @@ attention-ai/
 │
 ├── logs/
 │   └── attention_log.csv      # Session logs
-│
-├── assets/                    # README visuals
-│   ├── demo.gif
-│   ├── architecture.png
-│   └── output_main.png
-│
 ├── main.py                    # Optional unified runner
 ├── requirements.txt
 └── README.md
@@ -191,13 +181,10 @@ pip install -r requirements.txt
 
 ---
 
-## 📸 Sample Outputs
-
 ### 🎯 Real-Time Tracking
 
-<!-- ![Real-time tracking output](assets/output_main.png) -->
-
----
+<<img width="1138" height="552" alt="image" src="https://github.com/user-attachments/assets/14ace0dd-54f0-452d-b2bb-4e87c5d472d4" />
+-->
 
 ## 🚀 Future Improvements
 
